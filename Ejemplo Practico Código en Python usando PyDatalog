@@ -1,0 +1,21 @@
+from pyDatalog import pyDatalog
+
+# Definimos los términos que usaremos
+pyDatalog.create_terms('depende, orden, ejecutable, X, Y, Z')
+
+# Hechos: Definimos las dependencias entre tareas
++depende("TareaA", "TareaB")  # TareaA depende de TareaB
++depende("TareaB", "TareaC")
++depende("TareaC", "TareaD")
++depende("TareaE", "TareaD")
+
+# Regla: Definimos qué significa que una tarea sea ejecutable
+ejecutable(X) <= ~depende(X, Y)  # Una tarea es ejecutable si no depende de ninguna otra
+
+# Regla: Definimos el orden de ejecución
+orden(X, Y) <= depende(X, Y)  # X debe ejecutarse antes que Y si X depende de Y
+orden(X, Z) <= depende(X, Y) & orden(Y, Z)  # X debe ejecutarse antes que Z si X depende de Y y Y debe ejecutarse antes que Z
+
+# Consulta: ¿Cuál es el orden de ejecución de las tareas?
+print("Orden de ejecución de las tareas:")
+print(orden(X, Y))
