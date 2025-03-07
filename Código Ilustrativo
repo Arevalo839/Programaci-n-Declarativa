@@ -1,0 +1,17 @@
+from pyDatalog import pyDatalog
+
+# Definimos los términos que usaremos
+pyDatalog.create_terms('padre, abuelo, X, Y, Z')
+
+# Hechos: Definimos las relaciones padre-hijo
++padre('juan', 'maria')
++padre('maria', 'pedro')
++padre('maria', 'ana')
++padre('carlos', 'juan')
+
+# Regla: Definimos qué es un abuelo
+abuelo(X, Y) <= padre(X, Z) & padre(Z, Y)
+
+# Consulta: ¿Quién es el abuelo de Pedro?
+print("Abuelo de Pedro:")
+print(abuelo(X, 'pedro'))
