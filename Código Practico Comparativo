@@ -1,0 +1,41 @@
+# Definimos las dependencias entre tareas como una lista de tuplas
+dependencias = [
+    ("TareaA", "TareaB"),  # TareaA depende de TareaB
+    ("TareaB", "TareaC"),
+    ("TareaC", "TareaD"),
+    ("TareaE", "TareaD")
+]
+
+# Función para construir el grafo de dependencias
+def construir_grafo(dependencias):
+    grafo = {}
+    for tarea, dependencia in dependencias:
+        if dependencia not in grafo:
+            grafo[dependencia] = []
+        grafo[dependencia].append(tarea)
+    return grafo
+
+# Función para obtener el orden de ejecución de las tareas (orden topológico)
+def orden_tareas(dependencias):
+    grafo = construir_grafo(dependencias)
+    visitados = set()
+    orden = []
+
+    # Función recursiva para recorrer el grafo
+    def dfs(tarea):
+        if tarea not in visitados:
+            visitados.add(tarea)
+            if tarea in grafo:
+                for dependiente in grafo[tarea]:
+                    dfs(dependiente)
+            orden.append(tarea)
+
+    # Recorremos todas las tareas que no tienen dependencias
+    for tarea in grafo:
+        dfs(tarea)
+
+    return orden[::-1]  # Invertimos el orden para obtener el correcto
+
+# Obtenemos el orden de ejecución de las tareas
+orden = orden_tareas(dependencias)
+print("Orden de ejecución de las tareas:", orden)
